@@ -1,5 +1,4 @@
 import datetime
-import time
 
 from django.db import models
 from django.contrib.auth.models import (
@@ -37,15 +36,15 @@ class User(AbstractBaseUser):
         unique=True,
     )
     is_active = models.BooleanField(default=True)
-    staff = models.BooleanField(default=False)  # an admin user; non super-user
-    admin = models.BooleanField(default=False)  # a superuser
+    staff = models.BooleanField(default=False)
+    admin = models.BooleanField(default=False)
     objects = UserManager()
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
     created_at = models.DateTimeField(default=datetime.datetime.now, blank=True)
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = []  # Email &amp; Password are required by default.
+    REQUIRED_FIELDS = []
 
     def get_full_name(self):
         return self.name + " " + self.surname
@@ -54,7 +53,7 @@ class User(AbstractBaseUser):
         return self.name
 
     def __str__(self):
-        return self.get_username()
+        return self.username
 
     def has_perm(self, perm, obj=None):
         return True

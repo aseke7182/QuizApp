@@ -9,7 +9,9 @@
       <change beforePath="$PROJECT_DIR$/QuizApp/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuizApp/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth_/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth_/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth_/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth_/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth_/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth_/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth_/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth_/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth_/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth_/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth_/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requiremets.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requiremets.txt" afterDir="false" />
     </list>
@@ -117,7 +119,8 @@
       <option name="presentableId" value="Default" />
       <updated>1662124284234</updated>
       <workItem from="1662124295093" duration="28297000" />
-      <workItem from="1662236674727" duration="1807000" />
+      <workItem from="1662236674727" duration="2883000" />
+      <workItem from="1662358012806" duration="1793000" />
     </task>
     <servers />
   </component>

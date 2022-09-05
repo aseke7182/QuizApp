@@ -1,9 +1,8 @@
-from rest_framework.serializers import ModelSerializer
-from rest_framework import serializers
-from .models import User
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
+
+from .models import User
 
 
 class RegistrationSerializer(ModelSerializer):

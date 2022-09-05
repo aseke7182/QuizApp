@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import ping, UsersList, UserInfo, Registration, UserLogin, UserLogout
 from rest_framework_simplejwt import views as jwt_views
+
+from .views import ping, UsersList, UserInfo, Registration, UserLogin, UserLogout
 
 urlpatterns = [
     path('ping', ping),

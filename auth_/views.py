@@ -1,13 +1,12 @@
-from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from .models import User
-from .utils import get_tokens_for_user, unauthorized, ok
-from .messages import logout_msg, login_msg
-from .serializers import UserSerializer, RegistrationSerializer, UserLoginSerializer
+from django.http import HttpResponse
 from rest_framework import generics, permissions
-from rest_framework.views import Response, APIView
-from rest_framework import status
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.views import APIView
+
+from .messages import logout_msg, login_msg
+from .models import User
+from .serializers import UserSerializer, RegistrationSerializer, UserLoginSerializer
+from .utils import get_tokens_for_user, unauthorized, ok
 
 
 def ping(request):
