@@ -14,20 +14,17 @@ def ping(request):
 
 
 class Registration(generics.CreateAPIView):
-    model = User
     serializer_class = RegistrationSerializer
     permission_classes = (permissions.AllowAny,)
 
 
 class UsersList(generics.ListAPIView):
-    model = User
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (permissions.AllowAny,)
 
 
 class UserInfo(generics.RetrieveAPIView):
-    model = User
     serializer_class = UserSerializer
     queryset = User.objects.all()
     # permission_classes = (permissions.AllowAny,)
