@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import QuestionPackage, Topic, Question, Answer
+from .utils import validate_answers
 
 
 class TopicSerializer(serializers.ModelSerializer):
@@ -43,6 +44,20 @@ class AnswerSerializer(serializers.ModelSerializer):
         model = Answer
         fields = ('id', 'content', 'is_correct', 'explanation',)
 
+    def validate(self, data):
+        if data['is_correct'] and data['explanation'] == "":
+            raise serializers.ValidationError({"explanation": "right answer should have explanation"})
+        return data
+
+
+class QuestionInfoSerializer(serializers.ModelSerializer):
+    topic = TopicSerializer()
+    answers = AnswerSerializer(many=True, source='answer_set')
+
+    class Meta:
+        model = Question
+        fields = ('id', 'content', 'topic', 'answers',)
+
 
 class QuestionCreationSerializer(serializers.ModelSerializer):
     content = serializers.CharField(max_length=250, required=True)
@@ -58,3 +73,21 @@ class QuestionCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ('id', 'content', 'topic', 'topic_id', 'package', 'package_ids', 'answer')
+
+    def validate(self, data):
+        validate_answers(data['answer'])
+        return data
+
+    def create(self, validated_data):
+        answers = validated_data.pop('answer')
+
+        question = Question.objects.create(content=validated_data['content'], topic=validated_data['topic'])
+        question.package.set(validated_data['package'])
+
+        created_answers = []
+        for answer in answers:
+            ans = Answer.objects.create(question=question, **answer)
+            created_answers.append(ans)
+
+        setattr(question, 'answer', created_answers)
+        return question

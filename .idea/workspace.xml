@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d899a544-457b-40ba-a180-eebec7b089c6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/quiz/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/quiz/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QuizApp/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuizApp/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QuizApp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuizApp/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth_/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth_/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quiz/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/quiz/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quiz/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/quiz/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quiz/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/quiz/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quiz/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/quiz/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +116,7 @@
       <updated>1662124284234</updated>
       <workItem from="1662124295093" duration="28297000" />
       <workItem from="1662236674727" duration="2883000" />
-      <workItem from="1662358012806" duration="23751000" />
+      <workItem from="1662358012806" duration="36038000" />
     </task>
     <servers />
   </component>
