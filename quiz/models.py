@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+from datetime import datetime
 
 
 class Topic(models.Model):
@@ -7,6 +9,22 @@ class Topic(models.Model):
 
 class QuestionPackage(models.Model):
     name = models.CharField(max_length=100)
+    # user = models.ManyToManyField(settings.AUTH_USER_MODEL)
+
+
+class UserPackageRel(models.Model):
+    package = models.ForeignKey(QuestionPackage, on_delete=models.CASCADE, related_name='user_rel')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='package_rel')
+    passed_date = models.DateTimeField(default=datetime.now, blank=True)
+    points = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['package', 'user'],
+                name="unique_package_user"
+            )
+        ]
 
 
 def default_topic():
