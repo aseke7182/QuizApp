@@ -15,7 +15,8 @@ class QuestionPackage(models.Model):
 class UserPackageRel(models.Model):
     package = models.ForeignKey(QuestionPackage, on_delete=models.CASCADE, related_name='user_rel')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='package_rel')
-    passed_date = models.DateTimeField(default=datetime.now, blank=True)
+    first_pass_date = models.DateTimeField(default=datetime.now, blank=True)
+    best_pass_date = models.DateTimeField(default=datetime.now, blank=True)
     points = models.IntegerField(null=True, blank=True)
 
     class Meta:
@@ -25,6 +26,10 @@ class UserPackageRel(models.Model):
                 name="unique_package_user"
             )
         ]
+
+    def save(self, *args, **kwargs):
+        self.best_pass_date = datetime.now()
+        super(UserPackageRel, self).save(*args, **kwargs)
 
 
 def default_topic():

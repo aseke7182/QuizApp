@@ -1,11 +1,11 @@
 from django.http import HttpResponse
 from rest_framework import generics, views
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.response import Response
 
-from .models import QuestionPackage, Topic, Question
+from .models import QuestionPackage, Topic, Question, UserPackageRel
 from .serializers import PackageSerializer, TopicSerializer, QuestionCreationSerializer, PackageInfoSerializer, \
-    QuestionSerializer, QuestionInfoSerializer, QuestionSubmitSerializer
+    QuestionSerializer, QuestionInfoSerializer, QuestionSubmitSerializer, ScoreboardSerializer
 
 
 def ping(request):
@@ -55,7 +55,6 @@ class QuestionInfoAPI(views.APIView):
 class SubmitScoreAPI(views.APIView):
 
     def post(self, request, pk):
-        request.data['package_id'] = pk
         a = QuestionSubmitSerializer(data=request.data)
         a.context['user'] = request.user
         a.context['package_id'] = pk
@@ -63,3 +62,12 @@ class SubmitScoreAPI(views.APIView):
             a.save()
             return Response(a.data)
         return Response(a.errors)
+
+
+class PackageScoreBoard(generics.ListAPIView):
+    serializer_class = ScoreboardSerializer
+    permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+        pk = self.kwargs['pk']
+        return UserPackageRel.objects.filter(package_id=pk).order_by('-points')

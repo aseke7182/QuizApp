@@ -32,6 +32,8 @@ class UserLoginSerializer(ModelSerializer):
 
 
 class UserSerializer(ModelSerializer):
+    created_at = serializers.DateTimeField(format='%d.%m.%Y %H:%M:%S')
+
     class Meta:
         model = User
-        fields = ('id', 'name', 'surname', 'created_at')
+        fields = ('id', 'name', 'surname', 'created_at', 'username',)

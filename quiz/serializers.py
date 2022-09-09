@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import QuestionPackage, Topic, Question, Answer, UserPackageRel
-from .utils import validate_answers
+from auth_.serializers import UserSerializer
 
 
 class TopicSerializer(serializers.ModelSerializer):
@@ -76,18 +76,26 @@ class QuestionCreationSerializer(serializers.ModelSerializer):
     package_ids = serializers.PrimaryKeyRelatedField(allow_empty=False, queryset=QuestionPackage.objects.all(),
                                                      source='package', many=True, write_only=True)
 
-    answer = AnswerSerializer(required=True, many=True)
+    answers = AnswerSerializer(required=True, many=True)
 
     class Meta:
         model = Question
-        fields = ('id', 'content', 'topic', 'topic_id', 'package', 'package_ids', 'answer')
+        fields = ('id', 'content', 'topic', 'topic_id', 'package', 'package_ids', 'answers')
 
-    def validate(self, data):
-        validate_answers(data['answer'])
-        return data
+    def validate_answers(self, answers):
+        right_answers = 0
+        if len(answers) < 2:
+            raise serializers.ValidationError({"answer": "should be at least two variants"})
+        for answer in answers:
+            if answer['is_correct']:
+                right_answers += 1
+        if right_answers != 1:
+            raise serializers.ValidationError({"answers": "Must be one correct answer"})
+
+        return answers
 
     def create(self, validated_data):
-        answers = validated_data.pop('answer')
+        answers = validated_data.pop('answers')
 
         question = Question.objects.create(content=validated_data['content'], topic=validated_data['topic'])
         question.package.set(validated_data['package'])
@@ -97,13 +105,14 @@ class QuestionCreationSerializer(serializers.ModelSerializer):
             ans = Answer.objects.create(question=question, **answer)
             created_answers.append(ans)
 
-        setattr(question, 'answer', created_answers)
+        setattr(question, 'answers', created_answers)
         return question
 
 
 class QuestionSubmitSerializer(serializers.Serializer):
     answers = serializers.ListSerializer(child=serializers.IntegerField(), required=True, write_only=True)
     score = serializers.IntegerField(read_only=True)
+    max_score = serializers.IntegerField(read_only=True)
     right_answers = serializers.ListSerializer(child=CorrectAnswersSerializer(), read_only=True)
 
     def validate(self, data):
@@ -141,16 +150,18 @@ class QuestionSubmitSerializer(serializers.Serializer):
         for ans in answers:
             if ans.is_correct:
                 score += 1
-
-        # TODO: Somehow to do it more efficiently?
-        user_package_rel, created = UserPackageRel.objects.get_or_create(package_id=package_id, user=user)
-        now_score = 0
-        if not created:
-            now_score = user_package_rel.points
-        user_package_rel.points = max(score, now_score)
-        user_package_rel.save()
-
         validated_data['score'] = score
+
+        user_package_rel, created = UserPackageRel.objects.get_or_create(package_id=package_id, user=user,
+                                                                         defaults={'points': score})
+
+        if not created and user_package_rel.points < score:
+            user_package_rel.points = score
+            user_package_rel.save()
+        else:
+            score = user_package_rel.points
+        validated_data['max_score'] = score
+
         return validated_data
 
     def update(self, instance, validated_data):
@@ -161,3 +172,13 @@ class QuestionSubmitSerializer(serializers.Serializer):
         :return:
         """
         return validated_data
+
+
+class ScoreboardSerializer(serializers.ModelSerializer):
+    first_pass_date = serializers.DateTimeField(format='%d.%m.%Y %H:%M:%S')
+    best_pass_date = serializers.DateTimeField(format='%d.%m.%Y %H:%M:%S')
+    user = UserSerializer()
+
+    class Meta:
+        model = UserPackageRel
+        fields = ('user', 'first_pass_date', 'best_pass_date', 'points',)

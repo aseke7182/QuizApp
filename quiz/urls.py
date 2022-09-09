@@ -1,10 +1,12 @@
 from django.urls import path
-from .views import ping, PackageAPI, PackageInfoAPI, TopicAPI, QuestionCreationAPI, QuestionInfoAPI, SubmitScoreAPI
+from .views import ping, PackageAPI, PackageInfoAPI, TopicAPI, QuestionCreationAPI, QuestionInfoAPI, SubmitScoreAPI, \
+    PackageScoreBoard
 
 urlpatterns = [
     path('ping', ping),
     path('packages', PackageAPI.as_view()),
     path('packages/<int:pk>', PackageInfoAPI.as_view()),
+    path('packages/<int:pk>/scoreboard', PackageScoreBoard.as_view()),
     path('packages/<int:pk>/submit', SubmitScoreAPI.as_view()),
     path('topics', TopicAPI.as_view()),
     path('questions', QuestionCreationAPI.as_view()),
