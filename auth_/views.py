@@ -1,5 +1,6 @@
+from celery.result import AsyncResult
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework import generics, permissions
 from rest_framework import status
 from rest_framework.response import Response
@@ -13,7 +14,14 @@ from .utils import get_tokens_for_user, unauthorized, ok
 
 
 def ping(request):
-    return HttpResponse("Pong")
+    task_id = '2ccce62f-6877-443a-b3ed-2b8a748ddae8'
+    task_result = AsyncResult(task_id)
+    result = {
+        "task_id": task_id,
+        "task_status": task_result.status,
+        "task_result": task_result.result
+    }
+    return JsonResponse(result)
 
 
 class Registration(generics.CreateAPIView):
@@ -27,7 +35,7 @@ class Registration(generics.CreateAPIView):
 
             # send mail
             res = send_mail.delay(serializer.data['username'])
-            res.get(timeout=1)
+            print(res.id)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

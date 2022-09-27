@@ -13,6 +13,7 @@ def add(self, x, y):
 
 @app.task(bind=True, name='send_mail')
 def send_mail(self, username):
+    # Here celery task should send mail to registered user with some text
     mail = f'{username}@gmail.com'  # as example
     logger.info(mail)
-    # Here celery task should send mail to registered user with some text
+    return 'Email sent'
