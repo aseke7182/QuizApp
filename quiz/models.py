@@ -1,6 +1,6 @@
-from django.db import models
 from django.conf import settings
-from datetime import datetime
+from django.db import models
+from django.utils import timezone
 
 
 class Topic(models.Model):
@@ -15,8 +15,8 @@ class QuestionPackage(models.Model):
 class UserPackageRel(models.Model):
     package = models.ForeignKey(QuestionPackage, on_delete=models.CASCADE, related_name='user_rel')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='package_rel')
-    first_pass_date = models.DateTimeField(default=datetime.now, blank=True)
-    best_pass_date = models.DateTimeField(default=datetime.now, blank=True)
+    first_pass_date = models.DateTimeField(default=timezone.now, blank=True)
+    best_pass_date = models.DateTimeField(default=timezone.now, blank=True)
     points = models.IntegerField(null=True, blank=True)
 
     class Meta:
@@ -28,7 +28,7 @@ class UserPackageRel(models.Model):
         ]
 
     def save(self, *args, **kwargs):
-        self.best_pass_date = datetime.now()
+        self.best_pass_date = timezone.now()
         super(UserPackageRel, self).save(*args, **kwargs)
 
 

@@ -21,7 +21,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -42,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework'
+    'rest_framework',
+    'django_celery_results',
 ]
 
 INSTALLED_APPS += [
@@ -175,3 +175,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CELERY Configuration
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
+CELERY_CACHE_BACKEND = env('CELERY_CACHE_BACKEND')
+CELERY_ACCEPT_CONTENT = env('CELERY_ACCEPT_CONTENT').split()
+CELERY_TASK_SERIALIZER = env('CELERY_TASK_SERIALIZER')
+CELERY_RESULT_SERIALIZER = env('CELERY_RESULT_SERIALIZER')
+CELERY_IGNORE_RESULT = env('CELERY_IGNORE_RESULT')
